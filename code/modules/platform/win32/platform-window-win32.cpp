@@ -6,6 +6,8 @@ module;
 
 module platform:window;
 
+import :logger;
+
 static bool is_running = true; // TODO: This should be apart of user-data. 
 
 static void win32_register_window_class(const char* window_class_name, WNDPROC window_proc)

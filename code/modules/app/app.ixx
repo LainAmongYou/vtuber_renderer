@@ -9,18 +9,34 @@ export class VtuberApp
 public:
     explicit VtuberApp()
     {
+        logger_initialize(
+            LogLevel::trace,
+            LogMode::console,
+            { //foreground colors
+                .trace = LogColor::grey,
+                .debug = LogColor::blue,
+                .info  = LogColor::white,
+                .warn  = LogColor::yellow,
+                .error = LogColor::dark_red,
+                .fatal = LogColor::red,
+            }
+            // leaves background as black
+        );
+
         m_client_window = std::make_unique<PlatformWindow>("Vtuber Renderer", 1920, 1080);
 
         // register events 
         m_event_system.register_event(u16(EventCode::window_resized), this, on_app_resized_callback);
         m_event_system.register_event(u16(EventCode::key_pressed), this, on_app_key_press_callback);
 
+        log({}, "VTuber App is initialized.");
         m_is_initialized = true;
     }
 
     void deinit()
     {
         m_client_window.reset();
+        logger_shutdown();
         m_is_initialized = false;
     }
 
@@ -30,7 +46,11 @@ public:
         while (m_is_running)
         {
             bool success = m_client_window->pump_event_messages(m_input_system, m_event_system);
-            if (!success || !m_is_running) continue;
+            if (!success || !m_is_running) 
+            {
+                m_is_running = false;
+                continue;
+            }
         }
     }
 

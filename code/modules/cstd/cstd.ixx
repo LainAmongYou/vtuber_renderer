@@ -17,8 +17,12 @@ export import <memory>;
 export import <cstdlib>;
 export import <array>;
 export import <vector>;
-export import <cassert>;
 export import <optional>;
+export import <source_location>;
+export import <cstdarg>;
+export import <cstdio>;
+export import <format>;
+export import <string_view>;
 
 export constexpr uint8_t  U8_MAX             =  UINT8_MAX;
 export constexpr uint16_t U16_MAX            = UINT16_MAX;

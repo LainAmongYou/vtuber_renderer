@@ -109,11 +109,20 @@ target_sources(platform
             ${MODULE_PLATFORM_DIR}/platform-window.ixx
             ${MODULE_PLATFORM_DIR}/platform-input.ixx
             ${MODULE_PLATFORM_DIR}/platform-event.ixx
-            #${MODULE_PLATFORM_DIR}/win32/platform-window.cpp
+            ${MODULE_PLATFORM_DIR}/platform-logger.ixx
+)
+
+target_sources(platform 
+    PRIVATE 
+        ${MODULE_PLATFORM_DIR}/platform-logger.cpp
 )
 
 if (WIN32)
-    target_sources(platform PRIVATE ${MODULE_PLATFORM_DIR}/win32/platform-window.cpp)
+    target_sources(platform 
+        PRIVATE 
+            ${MODULE_PLATFORM_DIR}/win32/platform-window-win32.cpp
+            ${MODULE_PLATFORM_DIR}/win32/platform-logger-win32.cpp
+    )
 endif(WIN32)
 
 # link dependent modules

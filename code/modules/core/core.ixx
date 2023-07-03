@@ -1,10 +1,9 @@
 module;
 
-#define CHECK_TYPE(in_type, out_type) std::is_same<(out_type), (in_type)>::value
-
 export module core;
 
 import cstd;
+import <cassert>;
 
 //
 // Type aliasing
@@ -58,19 +57,18 @@ export constexpr u64 _1GB   = _GB(1);
 #define ENDIAN_ORDER  ('ABCD')
 export constexpr bool IS_LITTLE_ENDIAN = (ENDIAN_ORDER == LITTLE_ENDIAN);
 
+#define CHECK_TYPE(in_type, out_type) (std::is_same<(out_type), (in_type)>::value)
+
 export template<typename T>
-inline T as_bit(const s64 bit_index)
+constexpr T as_bit(const s64 bit_index)
 {
     static_assert(
-        CHECK_TYPE(T, s8) || CHECK_TYPE(T, s16) || CHECK_TYPE(T, s32) || CHECK_TYPE(T, s64) ||
-        CHECK_TYPE(T, u8) || CHECK_TYPE(T, u16) || CHECK_TYPE(T, u32) || CHECK_TYPE(T, u64),
+        std::is_same<T, s8>::value || std::is_same<T, s16>::value || std::is_same<T, s32>::value || std::is_same<T, s64>::value ||
+        std::is_same<T, u8>::value || std::is_same<T, u16>::value || std::is_same<T, u32>::value || std::is_same<T, u64>::value,
         "Invalid bit shift type"
     );
 
-    static_assert(
-        (sizeof(T) * 8) > bit_index,
-        "Attempting to left shift past bounds."
-    );
+    assert((sizeof(T) * 8) > bit_index);
 
     return static_cast<T>(1 << bit_index);
 }
