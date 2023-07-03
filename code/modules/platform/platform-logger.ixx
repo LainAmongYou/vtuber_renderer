@@ -94,15 +94,16 @@ export LogColor logger_get_background_color(LogLevel level);
 export struct LogPacket 
 {
     LogLevel             level    = LogLevel::info;
-    std::source_location location = std::source_location::current(); // gets the file information of the callee
+    std::source_location location = std::source_location::current(); // gets the file information of the caller
 };
 
+//
+// Default log level is ::info
 //
 // Usage:
 //     log({}, "Hello world")
 //     log({.level = LogLevel::warn}, "Hello world")
-//     log({}, "Hello world %s %d", some_variable, some_other_variable)
-//     log({}, "Hello world", LogLevel::trace)
+//     log({}, "Hello world {} {}", some_variable, some_other_variable)
 //
 // Log Format:
 //     [level] [filename:line] : Message
