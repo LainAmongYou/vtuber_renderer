@@ -31,9 +31,9 @@ pushd %HOST_DIR%\build
 
 	:: Run cmake in case any new files have been added
 	:: VS Code auto generates these files for me.
-	:: cmake -G "Visual Studio 17 2022" ..
+	:: cmake -G "Visual Studio 17 2022" -A x64 ..
 
-	devenv Vtuber_Renderer.sln /Build
+	devenv Vtuber_Renderer.sln /Build Debug
 	if %errorlevel% neq 0 (
 		echo Error during compilation!
 		popd

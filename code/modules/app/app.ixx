@@ -9,7 +9,7 @@ export class VtuberApp
 public:
     explicit VtuberApp()
     {
-        m_client_window = std::make_unique<PlatformWindow>();
+        m_client_window = std::make_unique<PlatformWindow>("Vtuber Renderer", 1920, 1080);
 
         // register events 
         m_event_system.register_event(u16(EventCode::window_resized), this, on_app_resized_callback);
@@ -26,6 +26,12 @@ public:
 
     void run()
     {
+        m_is_running = true;
+        while (m_is_running)
+        {
+            bool success = m_client_window->pump_event_messages(m_input_system, m_event_system);
+            if (!success || !m_is_running) continue;
+        }
     }
 
     inline bool is_initialized() { return m_is_initialized; }
@@ -44,7 +50,7 @@ private:
     bool                            m_is_running     = false;
     InputSystem                     m_input_system{};
     EventSystem                     m_event_system{};
-    std::unique_ptr<PlatformWindow> m_client_window;
+    std::unique_ptr<PlatformWindow> m_client_window = nullptr;
 
     void handle_resize(s32 width, s32 height)
     {
