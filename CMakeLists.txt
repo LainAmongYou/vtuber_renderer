@@ -107,6 +107,8 @@ target_sources(platform
         FILES
             ${MODULE_PLATFORM_DIR}/platform.ixx
             ${MODULE_PLATFORM_DIR}/platform-window.ixx
+            ${MODULE_PLATFORM_DIR}/platform-input.ixx
+            ${MODULE_PLATFORM_DIR}/platform-event.ixx
             #${MODULE_PLATFORM_DIR}/win32/platform-window.cpp
 )
 

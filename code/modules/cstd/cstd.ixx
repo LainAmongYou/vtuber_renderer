@@ -14,6 +14,10 @@ export import <variant>;
 export import <type_traits>;
 export import <iostream>;
 export import <memory>;
+export import <cstdlib>;
+export import <array>;
+export import <vector>;
+export import <cassert>;
 
 export constexpr uint8_t  U8_MAX             =  UINT8_MAX;
 export constexpr uint16_t U16_MAX            = UINT16_MAX;
