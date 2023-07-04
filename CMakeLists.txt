@@ -110,6 +110,7 @@ target_sources(platform
             ${MODULE_PLATFORM_DIR}/platform-input.ixx
             ${MODULE_PLATFORM_DIR}/platform-event.ixx
             ${MODULE_PLATFORM_DIR}/platform-logger.ixx
+            ${MODULE_PLATFORM_DIR}/platform-timer.ixx
 )
 
 target_sources(platform 
@@ -120,14 +121,20 @@ target_sources(platform
 if (WIN32)
     target_sources(platform 
         PRIVATE 
+            ${MODULE_PLATFORM_DIR}/win32/platform-win32.cpp
             ${MODULE_PLATFORM_DIR}/win32/platform-window-win32.cpp
             ${MODULE_PLATFORM_DIR}/win32/platform-logger-win32.cpp
+            ${MODULE_PLATFORM_DIR}/win32/platform-timer-win32.cpp
     )
 endif(WIN32)
 
 # link dependent modules
 target_link_libraries(platform PRIVATE cstd)
 target_link_libraries(platform PRIVATE core)
+
+if (WIN32)
+    target_link_libraries(platform PRIVATE Winmm.lib)
+endif(WIN32)
 
 #
 # Executable

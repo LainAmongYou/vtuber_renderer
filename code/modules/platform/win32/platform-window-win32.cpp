@@ -121,7 +121,21 @@ PlatformWindow::PlatformWindow(const char* client_window_name, const s32 window_
 
     if (m_handle)
     {
+        // get the current moditor refresh rate
+        HDC refresh_dc = GetDC(static_cast<HWND>(m_handle));
+	    int monitor_refresh_hz = 60;
+	    int win32_refresh_rate = GetDeviceCaps(refresh_dc, VREFRESH);
+	    if (win32_refresh_rate > 1)
+	    {
+	    	monitor_refresh_hz = win32_refresh_rate;
+	    }
+	    f32 game_update_hz = (monitor_refresh_hz / 2.0f);
+	    m_refresh_rate = 1.0f / static_cast<f32>(game_update_hz);
+	    ReleaseDC(static_cast<HWND>(m_handle), refresh_dc);
+
+        // show the window
         ShowWindow(static_cast<HWND>(m_handle), SW_SHOWNORMAL);
+
         m_is_running = true;
     }
     else
