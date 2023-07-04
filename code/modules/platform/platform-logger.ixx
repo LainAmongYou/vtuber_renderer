@@ -4,6 +4,7 @@ export module platform:logger;
 
 import cstd;
 import core;
+import <cassert>;
 
 export enum class LogColor : u8 
 {

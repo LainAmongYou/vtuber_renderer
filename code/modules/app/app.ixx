@@ -3,6 +3,7 @@ export module app;
 
 import cstd;
 import platform;
+import renderer;
 
 export class VtuberApp 
 {
@@ -26,6 +27,7 @@ public:
         platform_initialize();
 
         m_client_window = std::make_unique<PlatformWindow>("Vtuber Renderer", 1920, 1080);
+        m_renderer = std::make_unique<Renderer>();
 
         // register events 
         m_event_system.register_event(u16(EventCode::window_resized), this, on_app_resized_callback);
@@ -95,11 +97,12 @@ public: // Removed operators
     VtuberApp& operator=(const VtuberApp&& other) = delete;
 
 private:
-    bool                            m_is_initialized = false;
-    bool                            m_is_running     = false;
-    InputSystem                     m_input_system{};
-    EventSystem                     m_event_system{};
-    std::unique_ptr<PlatformWindow> m_client_window = nullptr;
+    bool                            m_is_initialized{false};
+    bool                            m_is_running    {false};
+    InputSystem                     m_input_system  {};
+    EventSystem                     m_event_system  {};
+    std::unique_ptr<PlatformWindow> m_client_window {nullptr};
+    std::unique_ptr<Renderer>       m_renderer      {nullptr};
 
     void handle_resize(s32 width, s32 height)
     {

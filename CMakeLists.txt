@@ -42,6 +42,8 @@ set(MODULE_CSTD_DIR        "${MODULE_DIR}/cstd")
 set(MODULE_CORE_DIR        "${MODULE_DIR}/core")
 set(MODULE_APP_DIR         "${MODULE_DIR}/app")
 set(MODULE_PLATFORM_DIR    "${MODULE_DIR}/platform")
+set(MODULE_GPU_DIR         "${MODULE_DIR}/gpu")
+set(MODULE_RENDERER_DIR    "${MODULE_DIR}/renderer")
 
 #
 # C++ Standard Library Module
@@ -93,6 +95,7 @@ target_sources(app
 target_link_libraries(app PRIVATE cstd)
 target_link_libraries(app PRIVATE core)
 target_link_libraries(app PRIVATE platform)
+target_link_libraries(app PRIVATE renderer)
 
 #
 # Platform Module
@@ -137,6 +140,60 @@ if (WIN32)
 endif(WIN32)
 
 #
+# GPU Module
+#
+
+add_library(gpu STATIC)
+
+target_sources(gpu
+    PUBLIC
+        FILE_SET CXX_MODULES
+        BASE_DIRS ${MODULE_GPU_DIR}
+        FILES
+            ${MODULE_GPU_DIR}/gpu.ixx
+            ${MODULE_GPU_DIR}/gpu-vulkan.ixx
+            ${MODULE_GPU_DIR}/gpu-vulkan-vendor.ixx
+            ${MODULE_GPU_DIR}/gpu-vulkan-loader.ixx
+            ${MODULE_GPU_DIR}/gpu-instance.ixx
+)
+
+target_compile_definitions(gpu 
+    PRIVATE 
+        VK_NO_PROTOTYPES
+)
+
+if (WIN32)
+    target_compile_definitions(gpu 
+        PRIVATE 
+            VK_USE_PLATFORM_WIN32_KHR
+    )
+endif(WIN32)
+
+# link dependent modules
+target_link_libraries(gpu PRIVATE cstd)
+target_link_libraries(gpu PRIVATE core)
+target_link_libraries(gpu PRIVATE platform)
+
+#
+# Renderer Module
+#
+
+add_library(renderer STATIC)
+
+target_sources(renderer
+    PUBLIC
+        FILE_SET CXX_MODULES
+        BASE_DIRS ${MODULE_RENDERER_DIR}
+        FILES
+            ${MODULE_RENDERER_DIR}/renderer.ixx
+)
+
+# link dependent modules
+target_link_libraries(renderer PRIVATE cstd)
+target_link_libraries(renderer PRIVATE core)
+target_link_libraries(renderer PRIVATE gpu)
+
+#
 # Executable
 #
 
@@ -147,5 +204,4 @@ else()
 endif(WIN32)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE cstd)
-# target_link_libraries(${PROJECT_NAME} PRIVATE core)
 target_link_libraries(${PROJECT_NAME} PRIVATE app)
